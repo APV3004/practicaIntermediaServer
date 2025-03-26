@@ -13,6 +13,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  name: {
+    type: String,
+    required: false  // Nombre agregado para onboarding
+  },
+  surname: {
+    type: String,
+    required: false  // Apellidos agregados para onboarding
+  },
+  nif: {
+    type: String,
+    required: false  // NIF agregado para onboarding
+  },
   status: {
     type: String,
     enum: ['pending', 'verified'],
@@ -24,6 +36,7 @@ const userSchema = new mongoose.Schema({
     default: 'user'
   },
   verificationCode: String,
+  recoveryCode: String,  // Para la recuperación de contraseña
   verificationAttempts: {
     type: Number,
     default: 3

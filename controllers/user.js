@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');  // Asegúrate de que el modelo esté importado
-const { generateVerificationCode } = require('../utils/codeGenerator');
+
+// Función para generar un código de verificación aleatorio
+const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();  // Genera un código de 6 dígitos
+};
 
 // Registrar usuario
 exports.registerUser = async (req, res) => {
@@ -44,12 +48,13 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// Validar email
-exports.validateEmail = async (req, res) => {
-  const { code } = req.body; // El código de verificación que el usuario envía
+// Actualizar datos personales (Onboarding)
+exports.onboarding = async (req, res) => {
+  const { name, surname, nif } = req.body;
 
-  if (!code) {
-    return res.status(400).json({ message: 'El código de verificación es requerido' });
+  // Validar los campos (nombre, apellidos y NIF)
+  if (!name || !surname || !nif) {
+    return res.status(400).json({ message: 'Todos los campos son requeridos: nombre, apellidos, NIF' });
   }
 
   try {
@@ -64,19 +69,18 @@ exports.validateEmail = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Verificar si el código coincide
-    if (user.verificationCode === code) {
-      // Si el código es correcto, cambiar el estado a 'verified'
-      user.status = 'verified';
-      await user.save();
+    // Actualizar los datos del usuario
+    user.name = name;
+    user.surname = surname;
+    user.nif = nif;
 
-      res.status(200).json({ message: 'Email verificado con éxito' });
-    } else {
-      return res.status(400).json({ message: 'Código de verificación incorrecto' });
-    }
+    // Guardar los cambios
+    await user.save();
+
+    res.status(200).json({ message: 'Datos actualizados correctamente' });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Error al verificar el email' });
+    res.status(500).json({ message: 'Error al actualizar los datos' });
   }
 };
 
@@ -121,8 +125,14 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// Obtener el código de verificación (solo para pruebas)
-exports.getVerificationCode = async (req, res) => {
+// Validar email
+exports.validateEmail = async (req, res) => {
+  const { code } = req.body; // El código de verificación que el usuario envía
+
+  if (!code) {
+    return res.status(400).json({ message: 'El código de verificación es requerido' });
+  }
+
   try {
     // Decodificar el token JWT para obtener el ID del usuario
     const decoded = jwt.verify(req.headers.authorization.split(' ')[1], process.env.JWT_SECRET);
@@ -135,10 +145,18 @@ exports.getVerificationCode = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Retornar el código de verificación
-    res.status(200).json({ verificationCode: user.verificationCode });
+    // Verificar si el código coincide
+    if (user.verificationCode === code) {
+      // Si el código es correcto, cambiar el estado a 'verified'
+      user.status = 'verified';
+      await user.save();
+
+      res.status(200).json({ message: 'Email verificado con éxito' });
+    } else {
+      return res.status(400).json({ message: 'Código de verificación incorrecto' });
+    }
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Error al obtener el código de verificación' });
+    return res.status(500).json({ message: 'Error al verificar el email' });
   }
 };
