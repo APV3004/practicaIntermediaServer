@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
-dotenv.config();  // Esto carga las variables desde el archivo .env
+dotenv.config();  // Carga las variables desde el archivo .env
 
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/user');  // Asegúrate de que las rutas de usuario estén bien configuradas
+const userRoutes = require('./routes/user');  // Rutas de usuarios
 
 const app = express();
 
