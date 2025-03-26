@@ -1,18 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/user');  // Asegúrate de que esté importado correctamente
-const authenticate = require('../middleware/auth');  // Importamos el middleware
+const userController = require('../controllers/user');
 
-// Ruta para registrar usuario
+// Rutas para las operaciones de usuario
 router.post('/register', userController.registerUser);
-
-// Ruta para validar el email
-router.put('/validation', userController.validateEmail);
-
-// Ruta para login
-router.post('/login', userController.loginUser);
-
-// Ruta para actualizar datos personales (onboarding) - protegida con JWT
-router.put('/onboarding', authenticate, userController.onboarding);  // Usamos el middleware aquí
+router.put('/validation', userController.verifyCode);
+router.post('/login', userController.loginUser); // Ruta añadida para login
 
 module.exports = router;

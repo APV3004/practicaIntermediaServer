@@ -1,25 +1,27 @@
-const dotenv = require('dotenv');
-dotenv.config();  // Carga las variables desde el archivo .env
-
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/user');  // Rutas de usuarios
+const cors = require('cors');
+const dotenv = require('dotenv');
+const userRoutes = require('./routes/user');  // Asegúrate de que la ruta sea correcta
+
+dotenv.config();  // Cargar variables de entorno
 
 const app = express();
 
-// Middleware para analizar el cuerpo de la solicitud como JSON
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Usar las rutas definidas en routes/user.js
-app.use('/api/user', userRoutes);
+// Rutas
+app.use('/api/user', userRoutes);  // Registra las rutas de usuario
 
-// Conexión a MongoDB
+// Conexión a la base de datos
 mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('✅ Conectado a MongoDB'))
-  .catch(err => console.error('❌ Error conectando a MongoDB:', err));
+  .then(() => console.log('Conectado a MongoDB'))
+  .catch(err => console.error('Error conectando a MongoDB:', err));
 
-// Iniciar el servidor en el puerto definido
+// Arrancar el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
