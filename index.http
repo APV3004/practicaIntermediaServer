@@ -1,0 +1,8 @@
+### Registro de usuario
+POST http://localhost:3000/api/user/register
+Content-Type: application/json
+
+{
+  "email": "usuario6@ejemplo.com",
+  "password": "miclave12345"
+}
