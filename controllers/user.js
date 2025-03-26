@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');  // Asegúrate de que el modelo esté importado
 const { generateVerificationCode } = require('../utils/codeGenerator');
 
@@ -76,6 +77,47 @@ exports.validateEmail = async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Error al verificar el email' });
+  }
+};
+
+// Login de usuario
+exports.loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email y contraseña son requeridos' });
+  }
+
+  try {
+    // Verificar si el usuario existe
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Verificar si el estado es "verified"
+    if (user.status !== 'verified') {
+      return res.status(403).json({ message: 'Email no verificado' });
+    }
+
+    // Verificar la contraseña
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Contraseña incorrecta' });
+    }
+
+    // Generar token JWT
+    const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '7d' });
+
+    // Devolver el token JWT
+    res.status(200).json({
+      message: 'Login exitoso',
+      token
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Error en el login' });
   }
 };
 
