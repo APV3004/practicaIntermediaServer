@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String },
   nif: { type: String },
   
-  // Datos de la compañía (solo si no es autónomo)
-  isAutonomous: { type: Boolean, default: false },  // Para diferenciar entre autónomo o no autónomo
+  // Datos de la compañía
+  isAutonomous: { type: Boolean, default: false },
   companyName: { type: String },
   companyCif: { type: String },
   companyAddress: { type: String },
@@ -20,7 +20,10 @@ const userSchema = new mongoose.Schema({
   companyNumber: { type: Number },
   companyPostal: { type: Number },
   companyCity: { type: String },
-  companyProvince: { type: String }
+  companyProvince: { type: String },
+
+  // Logo del usuario
+  logo: { type: String }
 });
 
 const User = mongoose.model('User', userSchema);

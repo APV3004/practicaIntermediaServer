@@ -1,21 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/user');  // Importa el controlador actualizado
-const authenticate = require('../middleware/auth');  // Middleware para proteger las rutas
+const userController = require('../controllers/user');
+const authenticate = require('../middleware/auth');
+const upload = require('../middleware/upload');
+const { uploadLogo } = require('../controllers/uploadLogo');
+const { getUserProfile } = require('../controllers/getUserProfile');
 
-// Ruta para registrar un nuevo usuario
+// Registro
 router.post('/register', userController.registerUser);
 
-// Ruta para verificar el código de verificación
+// Verificación
 router.put('/validation', userController.verifyCode);
 
-// Ruta para login de usuario
+// Login
 router.post('/login', userController.loginUser);
 
-// Ruta para actualizar los datos personales del usuario (onboarding)
+// Onboarding personal
 router.put('/onboarding', authenticate, userController.updateUserData);
 
-// Ruta para actualizar los datos de la compañía (con los cambios para autónomos)
-router.patch('/company', authenticate, userController.updateCompanyData);  // Aquí se utiliza el método PATCH
+// Datos de la compañía
+router.patch('/company', authenticate, userController.updateCompanyData);
+
+// Obtener perfil del usuario autenticado
+router.get('/me', authenticate, getUserProfile);
+
+// Subir logo
+router.patch('/logo', authenticate, upload.single('logo'), uploadLogo);
 
 module.exports = router;
