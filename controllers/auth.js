@@ -1,8 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const emailValidator = require('../validators/email');
-const passwordValidator = require('../validators/password');
+const emailValidator = require('../validators/mail');
 
 // Función para registrar un usuario
 exports.registerUser = async (req, res) => {
@@ -14,10 +13,6 @@ exports.registerUser = async (req, res) => {
 
   if (!emailValidator(email)) {
     return res.status(400).json({ message: 'El email no es válido' });
-  }
-
-  if (!passwordValidator(password)) {
-    return res.status(400).json({ message: 'La contraseña debe tener al menos 8 caracteres' });
   }
 
   try {

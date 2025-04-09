@@ -6,9 +6,40 @@ const upload = require('../middleware/upload');
 const { uploadLogo } = require('../controllers/uploadLogo');
 const { inviteGuest } = require('../controllers/inviteGuest');
 
+/**
+ * @swagger
+ * /api/user:
+ *   get:
+ *     summary: Endpoint base para comprobar disponibilidad del servicio de usuario
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: OK - Ruta base de usuarios disponible
+ */
+router.get('/', (req, res) => {
+  res.status(200).json({ message: 'OK - ruta base /api/user' });
+});
+
 // Registro
 router.post('/register', userController.registerUser);
 
+/**
+ * @swagger
+ * /api/user/register:
+ *   post:
+ *     summary: Registrar un nuevo usuario
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/user'
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente
+ */
+ 
 // Verificación
 router.put('/validation', userController.verifyCode);
 
