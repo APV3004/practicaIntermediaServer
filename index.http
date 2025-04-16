@@ -3,17 +3,17 @@ POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "usuario45@ejemplo.com",
+  "email": "pazosvarelaa@gmail.com",
   "password": "miclave12345"
 }
 
 ### Verificación del código
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZWE3NjllNzBkODkxNmI1ZjI4YTE5ZCIsImVtYWlsIjoidXN1YXJpbzQ1QGVqZW1wbG8uY29tIiwiaWF0IjoxNzQzNDE5MDM4LCJleHAiOjE3NDQwMjM4Mzh9.6fZP90Nzm2lhhyOEGqx0h42Odw-ZScWZOaS7cL1kJ_8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiY2ZjZDI2NDRjZjQwMmE0OTAzNCIsImVtYWlsIjoidXN1YXJpbzQ2QGVqZW1wbG8uY29tIiwiaWF0IjoxNzQ0ODEzMzA4LCJleHAiOjE3NDU0MTgxMDh9.NRp3rjL0l5-W4w_45R5Lu6EQTDgJSh_7P3fgvYmVcwg
 
 {
-  "code": "444549"
+  "code": "348977"
 }
 
 ### Login de Usuario
@@ -21,7 +21,7 @@ POST http://localhost:3000/api/user/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "usuario45@ejemplo.com",
+  "email": "usuario46@ejemplo.com",
   "password": "miclave12345"
 }
 
@@ -142,4 +142,17 @@ Content-Type: application/json
 
 {
   "email": "invitado@ejemplo.com"
+}
+
+
+### Enviar email de prueba
+POST http://localhost:3000/api/mail
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Content-Type: application/json
+
+{
+  "to": "adrianpazosvarela04@gmail.com",
+  "from": "pazosvarelaa@gmail.com",
+  "subject": "Email de prueba desde .http",
+  "text": "Hola! Este es un email de prueba desde tu API"
 }

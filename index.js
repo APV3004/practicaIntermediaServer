@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const userRoutes = require('./routes/user');
-const projectRoutes = require('./routes/project'); // ⬅️ AÑADIDO AQUÍ
+const projectRoutes = require('./routes/project');
+const mailRoutes = require('./routes/mail'); 
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./docs/swagger");
 
@@ -19,8 +20,9 @@ app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Rutas
-app.use('/api/user', userRoutes);  // Registra las rutas de usuario
-app.use('/api/project', projectRoutes);  // ⬅️ AÑADIDO AQUÍ
+app.use('/api/user', userRoutes);           
+app.use('/api/project', projectRoutes);     
+app.use('/api', mailRoutes);                
 
 // Conexión a la base de datos
 mongoose.connect(process.env.MONGO_URI)

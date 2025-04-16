@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
-const authenticate = require('../middleware/auth');
+const { auth } = require('../middleware/auth'); // ✅ Importación corregida
 const upload = require('../middleware/upload');
 const { uploadLogo } = require('../controllers/uploadLogo');
 const { inviteGuest } = require('../controllers/inviteGuest');
@@ -39,7 +39,7 @@ router.post('/register', userController.registerUser);
  *       201:
  *         description: Usuario registrado exitosamente
  */
- 
+
 // Verificación
 router.put('/validation', userController.verifyCode);
 
@@ -47,21 +47,21 @@ router.put('/validation', userController.verifyCode);
 router.post('/login', userController.loginUser);
 
 // Onboarding personal
-router.put('/onboarding', authenticate, userController.updateUserData);
+router.put('/onboarding', auth, userController.updateUserData);
 
 // Datos de la compañía
-router.patch('/company', authenticate, userController.updateCompanyData);
+router.patch('/company', auth, userController.updateCompanyData);
 
 // Obtener perfil del usuario autenticado
-router.get('/me', authenticate, userController.getUserFromToken); 
+router.get('/me', auth, userController.getUserFromToken);
 
 // Subir logo
-router.patch('/logo', authenticate, upload.single('logo'), uploadLogo);
+router.patch('/logo', auth, upload.single('logo'), uploadLogo);
 
 // Funcionalidades adicionales (punto 6)
-router.delete('/delete', authenticate, userController.deleteUser);
+router.delete('/delete', auth, userController.deleteUser);
 router.post('/recover', userController.recoverPasswordInit);
 router.post('/reset-password', userController.recoverPassword);
-router.post('/invite', authenticate, inviteGuest); 
+router.post('/invite', auth, inviteGuest);
 
 module.exports = router;

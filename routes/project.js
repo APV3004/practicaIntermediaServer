@@ -2,9 +2,13 @@
 const express = require("express");
 const router = express.Router();
 const { auth } = require("../middleware/auth");
+console.log("🧪 auth:", typeof auth);
 const { validateProject } = require("../validators/project");
+console.log("🧪 validateProject:", typeof validateProject);
+console.log("🧪 es array:", Array.isArray(validateProject));
 const { validationResult } = require("express-validator");
 const projectController = require("../controllers/project");
+console.log("🧪 createProject:", typeof projectController.createProject);
 
 const checkValidations = (req, res, next) => {
   const errors = validationResult(req);
