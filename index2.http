@@ -56,8 +56,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxN
 Content-Type: multipart/form-data; boundary=boundary123
 
 --boundary123
-Content-Disposition: form-data; name="signature"; filename="1.jpeg"
-Content-Type: image/png
+Content-Disposition: form-data; name="signature"; filename="firma.jpg"
+Content-Type: image/jpeg
 
 < ./1.jpeg
 --boundary123--
