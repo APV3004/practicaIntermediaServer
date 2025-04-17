@@ -1,3 +1,4 @@
+// routes/deliveryNote.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -95,7 +96,7 @@ router.get('/:id', auth, controller.getNoteById);
  * @swagger
  * /api/deliverynote/pdf/{id}:
  *   get:
- *     summary: Generar y descargar PDF de un albarán
+ *     summary: Obtener PDF de un albarán (redirige a IPFS si está firmado y subido)
  *     tags: [Albaranes]
  *     security:
  *       - bearerAuth: []
@@ -107,9 +108,13 @@ router.get('/:id', auth, controller.getNoteById);
  *           type: string
  *     responses:
  *       200:
- *         description: PDF generado y descargado
+ *         description: PDF generado o redirigido correctamente
+ *       404:
+ *         description: Albarán no encontrado
+ *       500:
+ *         description: Error generando o accediendo al PDF
  */
-router.get('/pdf/:id', auth, controller.generatePDF);
+router.get('/pdf/:id', auth, controller.getPDF);
 
 /**
  * @swagger

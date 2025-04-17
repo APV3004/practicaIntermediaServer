@@ -4,10 +4,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxN
 Content-Type: application/json
 
 {
-  "name": "Cliente Albaranes",
-  "email": "cliente@albaranes.com",
-  "phone": "600123456",
-  "address": "Calle de los Albaranes, 123"
+  "name": "Cliente Albaranes 2",
+  "email": "cliente1@albaranes.com",
+  "phone": "600123556",
+  "address": "Calle de los Albaranes, 1234"
 }
 
 ### 2. Crear proyecto asociado al cliente (usa el ID de respuesta del paso 1)
@@ -16,9 +16,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxN
 Content-Type: application/json
 
 {
-  "name": "Proyecto Albaranes 1",
-  "description": "Proyecto para probar flujo de albaranes",
-  "client": "68002b627a6ae3f42e7bf402"
+  "name": "Proyecto Albaranes 2",
+  "description": "Proyecto para probar flujo de albaranes 2",
+  "client": "68017b19d6492f4923d036c7"
 }
 
 ### 3. Crear albarán simple (usa el ID del proyecto y cliente creados arriba)
@@ -27,13 +27,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxN
 Content-Type: application/json
 
 {
-  "project": "68002b8c7a6ae3f42e7bf40b",
-  "client": "68002b627a6ae3f42e7bf402",
+  "project": "68017b42d6492f4923d036ca",
+  "client": "68017b19d6492f4923d036c7",
   "type": "simple",
   "data": [
     {
-      "person": "Juan Técnico",
-      "hours": 5
+      "person": "Juan gei",
+      "hours": 6
     }
   ]
 }
@@ -43,15 +43,15 @@ GET http://localhost:3000/api/deliverynote
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
 
 ### 5. Obtener un albarán específico
-GET http://localhost:3000/api/deliverynote/68002ba77a6ae3f42e7bf40d
+GET http://localhost:3000/api/deliverynote/68017b62d6492f4923d036cc
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
 
 ### 6. Descargar PDF del albarán
-GET http://localhost:3000/api/deliverynote/pdf/68002ba77a6ae3f42e7bf40d
+GET http://localhost:3000/api/deliverynote/pdf/68017b62d6492f4923d036cc
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
 
 ### Firmar albarán (sube imagen de firma a IPFS y marca como firmado)
-POST http://localhost:3000/api/deliverynote/sign/68002ba77a6ae3f42e7bf40d
+POST http://localhost:3000/api/deliverynote/sign/68017b62d6492f4923d036cc
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
 Content-Type: multipart/form-data; boundary=boundary123
 
@@ -62,6 +62,15 @@ Content-Type: image/jpeg
 < ./1.jpeg
 --boundary123--
 
+
+### 7.1 Verificar que el albarán tiene el PDF subido
+GET http://localhost:3000/api/deliverynote/68017b62d6492f4923d036cc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+
+### 7.2 Volver a probar descarga PDF (redirige a IPFS si firmado)
+GET http://localhost:3000/api/deliverynote/pdf/68017b62d6492f4923d036cc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+
 ### 8. Eliminar albarán (solo si no está firmado)
 DELETE http://localhost:3000/api/deliverynote/68002ba77a6ae3f42e7bf40d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Authorization: Bearer {{TOKEN}}

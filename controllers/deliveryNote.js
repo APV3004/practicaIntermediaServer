@@ -5,6 +5,7 @@ const User = require('../models/user');
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 const { uploadToIPFS } = require('../utils/handleIPFS');
 
 exports.createNote = async (req, res) => {
@@ -44,22 +45,14 @@ exports.getNoteById = async (req, res) => {
   }
 };
 
-exports.generatePDF = async (req, res) => {
+exports.generatePDF = async (req, res, filenameOverride) => {
   try {
-    const note = await DeliveryNote.findById(req.params.id)
+    const note = await DeliveryNote.findById(req.params.id || req.body.noteId)
       .populate('project client createdBy');
 
-    if (!note) return res.status(404).json({ message: 'No encontrado' });
+    if (!note) throw new Error('Albarán no encontrado');
 
-    // Verificación de permisos
-    if (note.createdBy._id.toString() !== req.user.id) {
-      const user = await User.findById(req.user.id);
-      if (user.role !== 'guest' || user.invitedBy?.toString() !== note.createdBy._id.toString()) {
-        return res.status(403).json({ message: 'No autorizado' });
-      }
-    }
-
-    const filename = `albaran-${note._id}.pdf`;
+    const filename = filenameOverride || `albaran-${note._id}.pdf`;
     const publicDir = path.join(__dirname, '../public');
     if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir);
     const filepath = path.join(publicDir, filename);
@@ -67,7 +60,6 @@ exports.generatePDF = async (req, res) => {
     const doc = new PDFDocument({ margin: 50 });
     doc.pipe(fs.createWriteStream(filepath));
 
-    // Estilo encabezado
     doc.fontSize(20).text(`Albarán de Proyecto`, { align: 'center' });
     doc.moveDown();
 
@@ -89,42 +81,74 @@ exports.generatePDF = async (req, res) => {
     });
 
     if (note.signed && note.signatureUrl) {
-      doc.moveDown().text(`Firmado ✓`, { continued: true });
-      doc.text(` (ver firma: ${note.signatureUrl})`, {
-        link: note.signatureUrl,
-        underline: true
+      const signaturePath = path.join(__dirname, `../public/sign-${note._id}.png`);
+      const writer = fs.createWriteStream(signaturePath);
+      const response = await axios({ url: note.signatureUrl, responseType: 'stream' });
+      await new Promise((resolve, reject) => {
+        response.data.pipe(writer);
+        writer.on('finish', resolve);
+        writer.on('error', reject);
       });
+
+      doc.addPage().fontSize(16).text('FIRMA DIGITAL:', { align: 'center' });
+      doc.image(signaturePath, { fit: [250, 250], align: 'center' });
+      fs.unlinkSync(signaturePath);
     }
 
     doc.end();
-    doc.on('finish', () => {
-      res.download(filepath, (err) => {
-        if (!err) fs.unlinkSync(filepath);
-      });
+    await new Promise((resolve) => doc.on('finish', resolve));
+
+    return filepath;
+  } catch (err) {
+    throw err;
+  }
+};
+
+exports.getPDF = async (req, res) => {
+  try {
+    const note = await DeliveryNote.findById(req.params.id);
+    if (!note) return res.status(404).json({ message: 'Albarán no encontrado' });
+
+    if (note.pdfUrl) {
+      return res.redirect(note.pdfUrl);
+    }
+
+    const filePath = await exports.generatePDF({ params: { id: req.params.id }, user: req.user });
+    res.download(filePath, (err) => {
+      if (!err) fs.unlinkSync(filePath);
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error al generar PDF' });
+    res.status(500).json({ message: 'Error al generar o descargar PDF', error: err.message });
   }
 };
 
 exports.signNote = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: 'Firma requerida' });
+    if (!req.file) {
+      return res.status(400).json({ message: 'Firma requerida' });
+    }
+
     const image = await uploadToIPFS(req.file);
+    const note = await DeliveryNote.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({ message: 'Albarán no encontrado para firmar' });
+    }
 
-    const note = await DeliveryNote.findByIdAndUpdate(
-      req.params.id,
-      {
-        signed: true,
-        signatureUrl: image.url,
-      },
-      { new: true }
-    );
+    note.signed = true;
+    note.signatureUrl = image.url;
 
-    res.json({ message: 'Firmado', note });
+    const filename = `albaran-${note._id}.pdf`;
+    const filepath = await exports.generatePDF({ params: { id: req.params.id }, user: req.user }, null, filename);
+    const uploaded = await uploadToIPFS({ path: filepath });
+    note.pdfUrl = uploaded.url;
+    await note.save();
+
+    fs.unlinkSync(filepath);
+
+    res.status(200).json({ message: 'Firmado y PDF subido a IPFS', note });
   } catch (err) {
-    res.status(500).json({ message: 'Error al firmar albarán' });
+    console.error("Error al firmar albarán:", err);
+    res.status(500).json({ message: 'Error al firmar albarán', error: err.message });
   }
 };
 
