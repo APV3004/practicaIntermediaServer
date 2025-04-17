@@ -1,0 +1,67 @@
+### 1. Crear cliente
+POST http://localhost:3000/api/client
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Content-Type: application/json
+
+{
+  "name": "Cliente Albaranes",
+  "email": "cliente@albaranes.com",
+  "phone": "600123456",
+  "address": "Calle de los Albaranes, 123"
+}
+
+### 2. Crear proyecto asociado al cliente (usa el ID de respuesta del paso 1)
+POST http://localhost:3000/api/project
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Content-Type: application/json
+
+{
+  "name": "Proyecto Albaranes 1",
+  "description": "Proyecto para probar flujo de albaranes",
+  "client": "68002b627a6ae3f42e7bf402"
+}
+
+### 3. Crear albarán simple (usa el ID del proyecto y cliente creados arriba)
+POST http://localhost:3000/api/deliverynote
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Content-Type: application/json
+
+{
+  "project": "68002b8c7a6ae3f42e7bf40b",
+  "client": "68002b627a6ae3f42e7bf402",
+  "type": "simple",
+  "data": [
+    {
+      "person": "Juan Técnico",
+      "hours": 5
+    }
+  ]
+}
+
+### 4. Obtener todos los albaranes
+GET http://localhost:3000/api/deliverynote
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+
+### 5. Obtener un albarán específico
+GET http://localhost:3000/api/deliverynote/68002ba77a6ae3f42e7bf40d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+
+### 6. Descargar PDF del albarán
+GET http://localhost:3000/api/deliverynote/pdf/68002ba77a6ae3f42e7bf40d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+
+### Firmar albarán (sube imagen de firma a IPFS y marca como firmado)
+POST http://localhost:3000/api/deliverynote/sign/68002ba77a6ae3f42e7bf40d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="signature"; filename="1.jpeg"
+Content-Type: image/png
+
+< ./1.jpeg
+--boundary123--
+
+### 8. Eliminar albarán (solo si no está firmado)
+DELETE http://localhost:3000/api/deliverynote/68002ba77a6ae3f42e7bf40d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
