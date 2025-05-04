@@ -3,7 +3,7 @@ POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "pazosvarelaa@gmail.com",
+  "email": "adrianpazosvarela04@gmail.com",
   "password": "miclave12345"
 }
 
@@ -144,15 +144,12 @@ Content-Type: application/json
   "email": "invitado@ejemplo.com"
 }
 
-
-### Enviar email de prueba
+### Enviar correo electrónico
 POST http://localhost:3000/api/mail
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc0NjhkZWE5ZDEyZDZjZjA1YzBkYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGEwNEBnbWFpbC5jb20iLCJpYXQiOjE3NDYzNTU4NTMsImV4cCI6MTc0Njk2MDY1M30.VXfHTm-5fjQK7FyUt_v4xhRppZAMLpMD3h1qwpGwH10
 
 {
   "to": "adrianpazosvarela04@gmail.com",
-  "from": "pazosvarelaa@gmail.com",
-  "subject": "Email de prueba desde .http",
-  "text": "Hola! Este es un email de prueba desde tu API"
+  "from": "pazosvarelaa@gmail.com"
 }

@@ -32,7 +32,7 @@ Content-Type: application/json
   "type": "simple",
   "data": [
     {
-      "person": "Juan gei",
+      "person": "Juan Pérez", 
       "hours": 6
     }
   ]

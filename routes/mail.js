@@ -28,8 +28,6 @@ const { send } = require("../controllers/mail");
  *             required:
  *               - to
  *               - from
- *               - subject
- *               - text
  *             properties:
  *               to:
  *                 type: string
@@ -43,6 +41,9 @@ const { send } = require("../controllers/mail");
  *               text:
  *                 type: string
  *                 example: "Tu código es: 123456"
+ *               verificationCode:
+ *                 type: string
+ *                 example: "123456"
  *     responses:
  *       200:
  *         description: Email enviado correctamente

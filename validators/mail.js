@@ -1,33 +1,18 @@
 const { check } = require('express-validator');
 const { validateResults } = require('../utils/handleValidator');
 
-// Validador personalizado para email
-const emailValidator = (email) => {
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  return regex.test(email);
-};
+const emailValidator = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
 
-// Middleware de validación de campos de envío de correo
 const validatorMail = [
-  check('subject')
-    .exists().withMessage('Subject is required')
-    .notEmpty().withMessage('Subject cannot be empty'),
-
-  check('text')
-    .exists().withMessage('Text is required')
-    .notEmpty().withMessage('Text cannot be empty'),
-
   check('to')
-    .exists().withMessage('Recipient email (to) is required')
-    .bail()
+    .exists().withMessage('Recipient email is required')
     .isEmail().withMessage('Invalid email format')
-    .custom(emailValidator).withMessage('Custom email validation failed for "to"'),
+    .custom(emailValidator).withMessage('Invalid recipient email'),
 
   check('from')
-    .exists().withMessage('Sender email (from) is required')
-    .bail()
+    .exists().withMessage('Sender email is required')
     .isEmail().withMessage('Invalid email format')
-    .custom(emailValidator).withMessage('Custom email validation failed for "from"'),
+    .custom(emailValidator).withMessage('Invalid sender email'),
 
   (req, res, next) => validateResults(req, res, next)
 ];
