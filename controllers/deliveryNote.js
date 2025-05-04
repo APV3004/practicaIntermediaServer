@@ -65,9 +65,9 @@ exports.generatePDF = async (req, res, filenameOverride) => {
 
     doc.fontSize(12)
       .text(`Fecha: ${new Date(note.date).toLocaleDateString()}`)
-      .text(`Proyecto: ${note.project.name}`)
-      .text(`Cliente: ${note.client.name}`)
-      .text(`Creado por: ${note.createdBy.email}`)
+      .text(`Proyecto: ${note.project?.name || 'Proyecto desconocido'}`)
+      .text(`Cliente: ${note.client?.name || 'Cliente desconocido'}`)
+      .text(`Creado por: ${note.createdBy?.email || 'Usuario desconocido'}`)
       .moveDown();
 
     doc.fontSize(14).text(`Detalle:`).moveDown(0.5);

@@ -1,54 +1,54 @@
 ### 1. Crear cliente
 POST http://localhost:3000/api/client
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 Content-Type: application/json
 
 {
-  "name": "Cliente Albaranes 2",
-  "email": "cliente1@albaranes.com",
-  "phone": "600123556",
-  "address": "Calle de los Albaranes, 1234"
+  "name": "Cliente Albaranes 3",
+  "email": "cliente3@albaranes.com",
+  "phone": "600123557",
+  "address": "Calle de los Albaranes, 124"
 }
 
 ### 2. Crear proyecto asociado al cliente (usa el ID de respuesta del paso 1)
 POST http://localhost:3000/api/project
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 Content-Type: application/json
 
 {
-  "name": "Proyecto Albaranes 2",
-  "description": "Proyecto para probar flujo de albaranes 2",
-  "client": "68017b19d6492f4923d036c7"
+  "name": "Proyecto descarga 6",
+  "description": "Proyecto para probar descarga de albaranes",
+  "client": "6817855b68830fb0db71b1da"
 }
 
 ### 3. Crear albarán simple (usa el ID del proyecto y cliente creados arriba)
 POST http://localhost:3000/api/deliverynote
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 Content-Type: application/json
 
 {
-  "project": "68017b42d6492f4923d036ca",
-  "client": "68017b19d6492f4923d036c7",
+  "project": "6817854c68830fb0db71b1d7",
+  "client": "6817855b68830fb0db71b1da",
   "type": "simple",
   "data": [
     {
-      "person": "Juan Pérez", 
-      "hours": 6
+      "person": "APV", 
+      "hours": 11
     }
   ]
 }
 
 ### 4. Obtener todos los albaranes
 GET http://localhost:3000/api/deliverynote
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 
 ### 5. Obtener un albarán específico
-GET http://localhost:3000/api/deliverynote/68017b62d6492f4923d036cc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+GET http://localhost:3000/api/deliverynote/6817870868830fb0db71b20b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 
 ### 6. Descargar PDF del albarán
-GET http://localhost:3000/api/deliverynote/pdf/68017b62d6492f4923d036cc
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZmZiZTMxNGQ0Zjk0MzMzYTc0Y2UwYiIsImVtYWlsIjoicGF6b3N2YXJlbGFhQGdtYWlsLmNvbSIsImlhdCI6MTc0NDgxMzYxNywiZXhwIjoxNzQ1NDE4NDE3fQ.gS-7oQQgswSogRUHRXeXcfAHiR5YcZUMCbw-QHJvaVs
+GET http://localhost:3000/api/deliverynote/pdf/6817870868830fb0db71b20b
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc4NTRjNjg4MzBmYjBkYjcxYjFkNyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExQGdtYWlsLmNvbSIsImlhdCI6MTc0NjM3MTkxNiwiZXhwIjoxNzQ2OTc2NzE2fQ.uby3yIxmVmS9ua65-MQgUmsJkbdYde1PZUnbfPZGL-Y
 
 ### Firmar albarán (sube imagen de firma a IPFS y marca como firmado)
 POST http://localhost:3000/api/deliverynote/sign/68017b62d6492f4923d036cc

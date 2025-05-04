@@ -1,13 +1,13 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const mongoose = require("mongoose");
 
-// Cargar variables de entorno
-dotenv.config();
+const dbConnect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ Conectado a MongoDB");
+  } catch (err) {
+    console.error("❌ Error al conectar a MongoDB:", err.message);
+    process.exit(1);
+  }
+};
 
-const db_uri = process.env.NODE_ENV === 'test' ? process.env.DB_URI :
-  process.env.DB_URI_TEST
-
-// Conectar a MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('Error conectando a MongoDB:', err));
+module.exports = dbConnect;
