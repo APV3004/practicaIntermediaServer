@@ -49,13 +49,13 @@ describe('Proyectos', () => {
       .post('/api/project')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Proyecto Alpha',
+        name: 'Proyecto Beta',
         description: 'Descripción de prueba',
         client: clientId
       });
 
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('name', 'Proyecto Alpha');
+    expect(res.body).toHaveProperty('name', 'Proyecto Beta');
     projectId = res.body._id;
   });
 

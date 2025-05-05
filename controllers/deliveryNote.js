@@ -1,3 +1,4 @@
+// controllers/deliveryNote.js
 const DeliveryNote = require('../models/deliveryNote');
 const Project = require('../models/project');
 const Client = require('../models/client');
@@ -124,28 +125,46 @@ exports.getPDF = async (req, res) => {
 
 exports.signNote = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: 'Firma requerida' });
-    }
+    const noteId = req.params.id;
+    const note = await DeliveryNote.findById(noteId);
+    if (!note) return res.status(404).json({ message: 'Albarán no encontrado' });
+    if (note.signed) return res.status(400).json({ message: 'El albarán ya está firmado' });
 
-    const image = await uploadToIPFS(req.file);
-    const note = await DeliveryNote.findById(req.params.id);
-    if (!note) {
-      return res.status(404).json({ message: 'Albarán no encontrado para firmar' });
-    }
+    const tempDir = path.join(__dirname, '../temp');
+    if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
 
-    note.signed = true;
-    note.signatureUrl = image.url;
+    const pdfPath = path.join(tempDir, `${noteId}.pdf`);
+    const doc = new PDFDocument();
+    const stream = fs.createWriteStream(pdfPath);
+    doc.pipe(stream);
 
-    const filename = `albaran-${note._id}.pdf`;
-    const filepath = await exports.generatePDF({ params: { id: req.params.id }, user: req.user }, null, filename);
-    const uploaded = await uploadToIPFS({ path: filepath });
-    note.pdfUrl = uploaded.url;
-    await note.save();
+    doc.fontSize(16).text(`Albarán #${noteId}`, { align: 'center' });
+    doc.text(`Tipo: ${note.type}`);
+    doc.text(`Fecha: ${new Date().toLocaleDateString()}`);
+    doc.text('---');
+    doc.text('Datos:');
+    note.data.forEach(item => {
+      doc.text(`- ${item.person || item.material}: ${item.hours || item.quantity}`);
+    });
+    doc.moveDown();
+    doc.text('Firma del cliente:');
+    doc.image(req.file.buffer, { fit: [150, 150] });
 
-    fs.unlinkSync(filepath);
+    doc.end();
 
-    res.status(200).json({ message: 'Firmado y PDF subido a IPFS', note });
+    stream.on('finish', async () => {
+      const fileBuffer = fs.readFileSync(pdfPath);
+      const { url } = await uploadToIPFS(fileBuffer, `${noteId}.pdf`);
+      fs.unlinkSync(pdfPath);
+
+      note.signed = true;
+      note.signatureUrl = url;
+      note.pdfUrl = url;
+      await note.save();
+
+      res.status(200).json({ message: 'Albarán firmado correctamente', note });
+    });
+
   } catch (err) {
     console.error("Error al firmar albarán:", err);
     res.status(500).json({ message: 'Error al firmar albarán', error: err.message });
@@ -156,9 +175,9 @@ exports.deleteNote = async (req, res) => {
   try {
     const note = await DeliveryNote.findById(req.params.id);
     if (!note) return res.status(404).json({ message: 'No encontrado' });
-    if (note.signed) return res.status(400).json({ message: 'No se puede eliminar firmado' });
+    if (note.signed) return res.status(400).json({ message: 'No se puede eliminar un albarán ya firmado' });
     await DeliveryNote.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Albarán eliminado' });
+    res.json({ message: 'Albarán eliminado correctamente' });
   } catch (err) {
     res.status(500).json({ message: 'Error al eliminar albarán' });
   }

@@ -1,8 +1,7 @@
 // routes/deliveryNote.js
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = require('../middleware/upload');
 const { auth } = require('../middleware/auth');
 const controller = require('../controllers/deliveryNote');
 const { validateDeliveryNote } = require('../validators/deliveryNote');

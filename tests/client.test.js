@@ -10,15 +10,15 @@ beforeAll(async () => {
 
   const res = await request(app)
     .post('/api/user/register')
-    .send({ email: 'client@test.com', password: 'client1234' });
+    .send({ email: 'client111@test.com', password: 'client1234' });
 
   await request(app)
     .put('/api/user/validation')
-    .send({ email: 'client@test.com', code: res.body.verificationCode });
+    .send({ email: 'client111@test.com', code: res.body.verificationCode });
 
   const login = await request(app)
     .post('/api/user/login')
-    .send({ email: 'client@test.com', password: 'client1234' });
+    .send({ email: 'client111@test.com', password: 'client1234' });
 
   token = login.body.token;
 });
@@ -34,17 +34,15 @@ describe('Clientes', () => {
       .post('/api/client')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Empresa Demo',
+        name: 'Empresa Demo2',
         email: 'demo@empresa.com',
-        phone: '699112233', // corregido
+        phone: '699312233',
         address: 'Calle Prueba 123',
         contactPerson: 'Juan Pérez'
       });
 
-    console.log(res.body); // puedes quitarlo si ya no es necesario
-
     expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('name', 'Empresa Demo');
+    expect(res.body).toHaveProperty('name', 'Empresa Demo2');
 
     clientId = res.body._id;
   });
@@ -67,7 +65,7 @@ describe('Clientes', () => {
   
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('_id', clientId);
-    expect(res.body).toHaveProperty('name', 'Empresa Demo');
+    expect(res.body).toHaveProperty('name', 'Empresa Demo2');
   });
   
   it('debería actualizar un cliente existente', async () => {
@@ -75,9 +73,9 @@ describe('Clientes', () => {
       .put(`/api/client/${clientId}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
-        name: 'Empresa Demo',
+        name: 'Empresa Demo2',
         email: 'demo@empresa.com',
-        phone: '644556677', // nuevo valor
+        phone: '644556677',
         address: 'Calle Prueba 123',
         contactPerson: 'Juan Pérez'
       });
@@ -87,7 +85,6 @@ describe('Clientes', () => {
   });
 
   it('debería restaurar un cliente archivado', async () => {
-    // Archivamos el cliente antes de restaurarlo
     await request(app)
       .patch(`/api/client/archive/${clientId}`)
       .set('Authorization', `Bearer ${token}`);
