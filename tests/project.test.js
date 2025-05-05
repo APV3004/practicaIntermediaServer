@@ -1,12 +1,13 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require('../index');
+const app = require('../app');
 
 let token;
 let projectId;
 let clientId;
 
 beforeAll(async () => {
+  // Conexión explícita a MongoDB
   await mongoose.connect(process.env.MONGO_URI_TEST || 'mongodb://localhost/testdb');
 
   // Crear usuario
@@ -36,7 +37,7 @@ beforeAll(async () => {
     });
 
   clientId = clientRes.body._id;
-});
+}, 20000);
 
 afterAll(async () => {
   await mongoose.connection.dropDatabase();
@@ -106,5 +107,4 @@ describe('Proyectos', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('message', 'Proyecto eliminado definitivamente');
   });
-  
 });

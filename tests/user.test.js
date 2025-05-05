@@ -1,6 +1,6 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require('../index');
+const app = require('../app');
 
 let verificationCode;
 let token;
