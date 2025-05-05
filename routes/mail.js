@@ -54,6 +54,6 @@ const { send } = require("../controllers/mail");
  *       500:
  *         description: Error al enviar el correo
  */
-router.post("/mail", auth, validatorMail, send);
+router.post("/", auth, validatorMail, send);
 
 module.exports = router;

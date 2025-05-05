@@ -54,10 +54,23 @@ exports.getProjectById = async (req, res) => {
   }
 };
 
+// controllers/project.js
+
 exports.archiveProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(req.params.id, { archived: true }, { new: true });
-    if (!project) return res.status(404).json({ message: "Proyecto no encontrado" });
+    const project = await Project.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        createdBy: req.user.id  // Asegura que solo el creador pueda archivarlo
+      },
+      { archived: true },
+      { new: true }
+    );
+
+    if (!project) {
+      return res.status(404).json({ message: "Proyecto no encontrado o no autorizado" });
+    }
+
     res.json({ message: "Proyecto archivado", project });
   } catch (err) {
     res.status(500).json({ message: "Error al archivar proyecto" });
@@ -66,8 +79,19 @@ exports.archiveProject = async (req, res) => {
 
 exports.restoreProject = async (req, res) => {
   try {
-    const project = await Project.findByIdAndUpdate(req.params.id, { archived: false }, { new: true });
-    if (!project) return res.status(404).json({ message: "Proyecto no encontrado" });
+    const project = await Project.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        createdBy: req.user.id  // Igual que archivar
+      },
+      { archived: false },
+      { new: true }
+    );
+
+    if (!project) {
+      return res.status(404).json({ message: "Proyecto no encontrado o no autorizado" });
+    }
+
     res.json({ message: "Proyecto restaurado", project });
   } catch (err) {
     res.status(500).json({ message: "Error al restaurar proyecto" });

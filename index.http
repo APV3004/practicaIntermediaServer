@@ -3,17 +3,17 @@ POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "adrianpazosvarela11@gmail.com",
+  "email": "final1@test.com",
   "password": "miclave12345"
 }
 
 ### Verificación del código
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdmMTg3ODc2MzRlZWNlMjFmNTU5MCIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMUBnbWFpbC5jb20iLCJpYXQiOjE3NDYzOTk2MjMsImV4cCI6MTc0NzAwNDQyM30.EpRGWv9YWltq54PL5ixnUIbb0i5jQ-md0P6sD8xW4Ac
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MThiNmYyMmY3YjdlMWE0YzFiNTdhYSIsImVtYWlsIjoiZmluYWwxQHRlc3QuY29tIiwiaWF0IjoxNzQ2NDUwMTYyLCJleHAiOjE3NDcwNTQ5NjJ9.nX2svlQuYqkP4gGOsi9frHJ3gZ9DL-tCtBhj0PH7BYA
 
 {
-  "code": "558662"
+  "code": "985569"
 }
 
 ### Login de Usuario
@@ -21,35 +21,35 @@ POST http://localhost:3000/api/user/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "adrianpazosvarela@gmail.com",
+  "email": "final@test.com",
   "password": "miclave12345"
 }
 
 ### Actualizar datos personales (Onboarding)
 PUT http://localhost:3000/api/user/onboarding
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxNTEzLCJleHAiOjE3NDY5NjYzMTN9.0M9FhBNTcJrzwQXrEODhLhEvvIDzHbE0q1RzfUIi-D4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MThhMGFmMmY3YjdlMWE0YzFiNTc5OSIsImVtYWlsIjoiZmluYWxAdGVzdC5jb20iLCJpYXQiOjE3NDY0NDQ1MzMsImV4cCI6MTc0NzA0OTMzM30.7LdFGxVLdheyMsezYs0qv_kZze8KLXuu32ERav-dtko
 
 {
-  "firstName": "ADRIAN",
-  "lastName": "Pérez",
-  "nif": "12345688X"
+  "firstName": "PRUEBA",
+  "lastName": "FINAL",
+  "nif": "987654321Z"
 }
 
 ### Actualizar datos de la compañía
 PATCH http://localhost:3000/api/user/company HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxNTEzLCJleHAiOjE3NDY5NjYzMTN9.0M9FhBNTcJrzwQXrEODhLhEvvIDzHbE0q1RzfUIi-D4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MThhMGFmMmY3YjdlMWE0YzFiNTc5OSIsImVtYWlsIjoiZmluYWxAdGVzdC5jb20iLCJpYXQiOjE3NDY0NDQ1MzMsImV4cCI6MTc0NzA0OTMzM30.7LdFGxVLdheyMsezYs0qv_kZze8KLXuu32ERav-dtko
 
 {
   "company": {
-    "companyName": "Mi Empresa S.L.",
-    "companyCif": "B12345678",
-    "companyAddress": "Calle Ficticia, 123",
-    "companyStreet": "Carlos V",
-    "companyNumber": 22,
-    "companyPostal": 28936,
-    "companyCity": "Móstoles",
+    "companyName": "EMPRESA FINAL S.L.",
+    "companyCif": "B97654321",
+    "companyAddress": "Calle Final, 123",
+    "companyStreet": "FINAL V",
+    "companyNumber": 33,
+    "companyPostal": 28040,
+    "companyCity": "Madrid",
     "companyProvince": "Madrid",
     "isAutonomous": false
   }
@@ -58,17 +58,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3O
 ### Actualizar datos de la compañía para autónomo
 PATCH http://localhost:3000/api/user/company HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxNTEzLCJleHAiOjE3NDY5NjYzMTN9.0M9FhBNTcJrzwQXrEODhLhEvvIDzHbE0q1RzfUIi-D4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MThhMGFmMmY3YjdlMWE0YzFiNTc5OSIsImVtYWlsIjoiZmluYWxAdGVzdC5jb20iLCJpYXQiOjE3NDY0NDQ1MzMsImV4cCI6MTc0NzA0OTMzM30.7LdFGxVLdheyMsezYs0qv_kZze8KLXuu32ERav-dtko
 
 {
   "company": {
-    "companyName": "Mi Empresa S.L.",
-    "companyCif": "B12345678",
-    "companyAddress": "Calle Ficticia, 123",
-    "companyStreet": "Carlos V",
-    "companyNumber": 22,
-    "companyPostal": 28936,
-    "companyCity": "Móstoles",
+    "companyName": "EMPRESA FINAL S.L.",
+    "companyCif": "B97654321",
+    "companyAddress": "Calle Final, 123",
+    "companyStreet": "FINAL V",
+    "companyNumber": 33,
+    "companyPostal": 28040,
+    "companyCity": "Madrid",
     "companyProvince": "Madrid",
     "isAutonomous": true
   }
@@ -77,7 +77,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3O
 
 ### Subir logo a IPFS
 PATCH http://localhost:3000/api/user/logo
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxNTEzLCJleHAiOjE3NDY5NjYzMTN9.0M9FhBNTcJrzwQXrEODhLhEvvIDzHbE0q1RzfUIi-D4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MThiNmYyMmY3YjdlMWE0YzFiNTdhYSIsImVtYWlsIjoiZmluYWwxQHRlc3QuY29tIiwiaWF0IjoxNzQ2NDUwMTYyLCJleHAiOjE3NDcwNTQ5NjJ9.nX2svlQuYqkP4gGOsi9frHJ3gZ9DL-tCtBhj0PH7BYA
 Content-Type: multipart/form-data; boundary=boundary123
 
 --boundary123
@@ -107,7 +107,7 @@ POST http://localhost:3000/api/user/recover
 Content-Type: application/json
 
 {
-  "email": "usuario45@ejemplo.com"
+  "email": "adrianpazosvarela111@ejemplo.com"
 }
 
 
@@ -133,19 +133,19 @@ Content-Type: application/json
 
 ### Invitar guest
 POST http://localhost:3000/api/user/invite
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxNTEzLCJleHAiOjE3NDY5NjYzMTN9.0M9FhBNTcJrzwQXrEODhLhEvvIDzHbE0q1RzfUIi-D4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg5ZmMxNjEyZGIyNDkyZDhlYmM0NyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMTFAZ21haWwuY29tIiwiaWF0IjoxNzQ2NDQ0MjI1LCJleHAiOjE3NDcwNDkwMjV9.aY7Tj7tGRig8QbgwMSy0uTmdl2Gfg48Ffn7LFUGLark
 Content-Type: application/json
 
 {
-  "email": "invitado2@ejemplo.com"
+  "email": "invitado3@ejemplo.com"
 }
 
 ### Enviar correo electrónico
 POST http://localhost:3000/api/mail
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdmMTg3ODc2MzRlZWNlMjFmNTU5MCIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMUBnbWFpbC5jb20iLCJpYXQiOjE3NDYzOTk2MjMsImV4cCI6MTc0NzAwNDQyM30.EpRGWv9YWltq54PL5ixnUIbb0i5jQ-md0P6sD8xW4Ac
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTg5ZmMxNjEyZGIyNDkyZDhlYmM0NyIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMTFAZ21haWwuY29tIiwiaWF0IjoxNzQ2NDQ0MjI1LCJleHAiOjE3NDcwNDkwMjV9.aY7Tj7tGRig8QbgwMSy0uTmdl2Gfg48Ffn7LFUGLark
 
 {
-  "to": "adrianpazosvarela11@gmail.com",
+  "to": "adrianpazosvarela111@gmail.com",
   "from": "pazosvarelaa@gmail.com"
 }

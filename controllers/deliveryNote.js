@@ -130,6 +130,10 @@ exports.signNote = async (req, res) => {
     if (!note) return res.status(404).json({ message: 'Albarán no encontrado' });
     if (note.signed) return res.status(400).json({ message: 'El albarán ya está firmado' });
 
+    if (!req.file || !req.file.buffer) {
+      return res.status(400).json({ message: 'No se adjuntó la firma' });
+    }
+
     const tempDir = path.join(__dirname, '../temp');
     if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir);
 

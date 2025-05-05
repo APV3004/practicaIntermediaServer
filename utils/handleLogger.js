@@ -1,5 +1,4 @@
-require("dotenv").config(); // ← AÑADIDO
-
+require("dotenv").config();
 const { IncomingWebhook } = require("@slack/webhook");
 
 const slackUrl = process.env.SLACK_WEBHOOK;
@@ -19,4 +18,4 @@ const loggerStream = {
   },
 };
 
-module.exports = loggerStream;
+module.exports = loggerStream; 

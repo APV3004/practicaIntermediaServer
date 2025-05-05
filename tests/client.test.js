@@ -107,3 +107,74 @@ describe('Clientes', () => {
     expect(res.body).toHaveProperty('message', 'Cliente eliminado definitivamente');
   });
 });
+
+describe('Errores comunes de clientes', () => {
+  let token;
+  const clientData = {
+    name: 'Cliente Prueba',
+    email: 'cliente@ejemplo.com',
+    phone: '600123456'
+  };
+
+  beforeAll(async () => {
+    // Registrar y loguear un usuario para obtener el token
+    const res = await request(app).post('/api/user/register').send({
+      email: 'clienteerror@example.com',
+      password: 'test1234'
+    });
+    await request(app).put('/api/user/validation').send({
+      email: 'clienteerror@example.com',
+      code: res.body.verificationCode
+    });
+    const login = await request(app).post('/api/user/login').send({
+      email: 'clienteerror@example.com',
+      password: 'test1234'
+    });
+    token = login.body.token;
+
+    // Crear cliente para prueba de duplicado
+    await request(app)
+      .post('/api/client')
+      .set('Authorization', `Bearer ${token}`)
+      .send(clientData);
+  });
+
+  it('no debería crear un cliente sin nombre', async () => {
+    const res = await request(app)
+      .post('/api/client')
+      .set('Authorization', `Bearer ${token}`)
+      .send({ email: 'incompleto@cliente.com' });
+  
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('errors');
+    expect(res.body.errors[0]).toHaveProperty('msg', 'El nombre del cliente es obligatorio');
+  });
+
+  it('no debería crear un cliente duplicado', async () => {
+    const res = await request(app)
+      .post('/api/client')
+      .set('Authorization', `Bearer ${token}`)
+      .send(clientData);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'Cliente ya creado por este usuario');
+  });
+
+  it('no debería obtener un cliente con ID inexistente', async () => {
+    const res = await request(app)
+      .get('/api/client/999999999999999999999999')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message');
+  });
+
+  it('no debería permitir crear cliente sin token', async () => {
+    const res = await request(app)
+      .post('/api/client')
+      .send(clientData);
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Acceso denegado. No se encontró el token.');
+  });
+});

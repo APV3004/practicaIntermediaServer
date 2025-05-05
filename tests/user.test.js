@@ -199,3 +199,59 @@ describe('Invitación de usuario guest', () => {
     expect(res.body.guest).toHaveProperty('status', 'pending');
   });
 });
+
+describe('Errores comunes de usuario', () => {
+  it('no debería registrar un usuario sin email', async () => {
+    const res = await request(app)
+      .post('/api/user/register')
+      .send({ password: 'algo1234' });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'Email y contraseña son requeridos');
+  });
+
+  it('no debería registrar un usuario sin password', async () => {
+    const res = await request(app)
+      .post('/api/user/register')
+      .send({ email: 'sinpass@example.com' });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'Email y contraseña son requeridos');
+  });
+
+  it('no debería validar con un código incorrecto', async () => {
+    const res = await request(app)
+      .put('/api/user/validation')
+      .send({ email: 'test@example.com', code: '000000' });
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message', 'Código de verificación no válido');
+  });
+
+  it('no debería loguearse con contraseña incorrecta', async () => {
+    const res = await request(app)
+      .post('/api/user/login')
+      .send({ email: 'test@example.com', password: 'incorrecta' });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Contraseña incorrecta');
+  });
+});
+
+describe('Autenticación fallida', () => {
+  it('no debería acceder a /me sin token', async () => {
+    const res = await request(app).get('/api/user/me');
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty('message', 'Acceso denegado. No se encontró el token.');
+  });
+
+  it('no debería acceder a /me con token inválido', async () => {
+    const res = await request(app)
+      .get('/api/user/me')
+      .set('Authorization', 'Bearer token_invalido');
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'Token no válido');
+  });
+});

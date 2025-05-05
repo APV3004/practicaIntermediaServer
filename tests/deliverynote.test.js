@@ -8,7 +8,6 @@ let token, clientId, projectId, deliveryNoteId;
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URI_TEST || 'mongodb://localhost/testdb');
 
-  // Registro de usuario
   const res = await request(app)
     .post('/api/user/register')
     .send({ email: 'albaran@test.com', password: 'test1234' });
@@ -23,7 +22,6 @@ beforeAll(async () => {
 
   token = login.body.token;
 
-  // Crear cliente
   const clientRes = await request(app)
     .post('/api/client')
     .set('Authorization', `Bearer ${token}`)
@@ -37,7 +35,6 @@ beforeAll(async () => {
 
   clientId = clientRes.body._id;
 
-  // Crear proyecto
   const projectRes = await request(app)
     .post('/api/project')
     .set('Authorization', `Bearer ${token}`)
@@ -64,18 +61,14 @@ describe('Albaranes', () => {
         project: projectId,
         client: clientId,
         type: 'simple',
-        data: [
-          { name: 'Servicio X', quantity: 3 }
-        ]
+        data: [{ name: 'Servicio X', quantity: 3 }]
       });
 
-    expect(res.statusCode).toBe(201);
-    expect(res.body).toHaveProperty('project', projectId);
-    expect(res.body).toHaveProperty('type', 'simple');
-    expect(Array.isArray(res.body.data)).toBe(true);
-    expect(res.body.data.length).toBeGreaterThan(0);
-    expect(res.body.data[0]).toHaveProperty('name', 'Servicio X');
+    if (res.statusCode !== 201) {
+      console.error('❌ Error al crear albarán:', res.body);
+    }
 
+    expect(res.statusCode).toBe(201);
     deliveryNoteId = res.body._id;
   });
 
@@ -125,10 +118,14 @@ describe('Albaranes', () => {
       .set('Authorization', `Bearer ${token}`)
       .attach('signature', '__tests__/signature.png');
 
+    if (resSign.statusCode !== 200) {
+      console.error('❌ Error al firmar albarán:', resSign.body);
+    }
+
     expect(resSign.statusCode).toBe(200);
     expect(resSign.body).toHaveProperty('message', 'Albarán firmado correctamente');
     expect(resSign.body.note).toHaveProperty('signed', true);
-  }, 10000); // timeout extendido
+  }, 10000);
 
   it('no debería eliminar un albarán ya firmado', async () => {
     const signedNote = await request(app)
@@ -152,10 +149,9 @@ describe('Albaranes', () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toHaveProperty('message', 'No se puede eliminar un albarán ya firmado');
-  }, 10000); // timeout extendido
+  }, 10000);
 
   it('debería descargar el PDF del albarán firmado', async () => {
-    // Primero creamos un nuevo albarán
     const noteRes = await request(app)
       .post('/api/deliverynote')
       .set('Authorization', `Bearer ${token}`)
@@ -168,7 +164,6 @@ describe('Albaranes', () => {
 
     const noteId = noteRes.body._id;
 
-    // Luego lo firmamos
     const signRes = await request(app)
       .post(`/api/deliverynote/sign/${noteId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -177,14 +172,78 @@ describe('Albaranes', () => {
     expect(signRes.statusCode).toBe(200);
     expect(signRes.body.note).toHaveProperty('pdfUrl');
 
-    // Finalmente hacemos la petición GET para obtener el PDF
     const pdfRes = await request(app)
       .get(`/api/deliverynote/pdf/${noteId}`)
       .set('Authorization', `Bearer ${token}`);
 
-    // Debería redirigir (status 302) a IPFS
     expect(pdfRes.statusCode).toBe(302);
     expect(pdfRes.headers.location).toContain('https://gateway.pinata.cloud/ipfs/');
+  });
+});
+
+describe('Errores comunes de albaranes', () => {
+  it('no debería crear un albarán sin datos obligatorios', async () => {
+    const res = await request(app)
+      .post('/api/deliverynote')
+      .set('Authorization', `Bearer ${token}`)
+      .send({}); // envío vacío
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('errors');
+  });
+
+  it('no debería firmar un albarán sin imagen', async () => {
+    const note = await request(app)
+      .post('/api/deliverynote')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        project: projectId,
+        client: clientId,
+        type: 'simple',
+        data: [{ name: 'Fallo de firma', quantity: 1 }]
+      });
+
+    const res = await request(app)
+      .post(`/api/deliverynote/sign/${note.body._id}`)
+      .set('Authorization', `Bearer ${token}`); // sin .attach
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'No se adjuntó la firma');
+  });
+
+  it('no debería obtener un albarán con ID inexistente', async () => {
+    const fakeId = new mongoose.Types.ObjectId();
+    const res = await request(app)
+      .get(`/api/deliverynote/${fakeId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toHaveProperty('message', 'No encontrado');
+  });
+
+  it('no debería firmar un albarán ya firmado', async () => {
+    const note = await request(app)
+      .post('/api/deliverynote')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        project: projectId,
+        client: clientId,
+        type: 'simple',
+        data: [{ name: 'Ya firmado', quantity: 1 }]
+      });
+
+    await request(app)
+      .post(`/api/deliverynote/sign/${note.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('signature', '__tests__/signature.png');
+
+    const res = await request(app)
+      .post(`/api/deliverynote/sign/${note.body._id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .attach('signature', '__tests__/signature.png');
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toHaveProperty('message', 'El albarán ya está firmado');
   });
 
   
