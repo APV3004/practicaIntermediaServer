@@ -3,17 +3,17 @@ POST http://localhost:3000/api/user/register
 Content-Type: application/json
 
 {
-  "email": "adrianpazosvarela1@gmail.com",
+  "email": "adrianpazosvarela11@gmail.com",
   "password": "miclave12345"
 }
 
 ### Verificación del código
 PUT http://localhost:3000/api/user/validation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxMjg3LCJleHAiOjE3NDY5NjYwODd9.y-6n_4qViE0EXVvbwz0cvzZ9Gf9JrNKIQHd_toT6yUc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdmMTg3ODc2MzRlZWNlMjFmNTU5MCIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMUBnbWFpbC5jb20iLCJpYXQiOjE3NDYzOTk2MjMsImV4cCI6MTc0NzAwNDQyM30.EpRGWv9YWltq54PL5ixnUIbb0i5jQ-md0P6sD8xW4Ac
 
 {
-  "code": "787330"
+  "code": "558662"
 }
 
 ### Login de Usuario
@@ -143,9 +143,9 @@ Content-Type: application/json
 ### Enviar correo electrónico
 POST http://localhost:3000/api/mail
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTc1YmM3OGYwZTZjOWVhM2UwZDliYiIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGFAZ21haWwuY29tIiwiaWF0IjoxNzQ2MzYxMjg3LCJleHAiOjE3NDY5NjYwODd9.y-6n_4qViE0EXVvbwz0cvzZ9Gf9JrNKIQHd_toT6yUc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTdmMTg3ODc2MzRlZWNlMjFmNTU5MCIsImVtYWlsIjoiYWRyaWFucGF6b3N2YXJlbGExMUBnbWFpbC5jb20iLCJpYXQiOjE3NDYzOTk2MjMsImV4cCI6MTc0NzAwNDQyM30.EpRGWv9YWltq54PL5ixnUIbb0i5jQ-md0P6sD8xW4Ac
 
 {
-  "to": "adrianpazosvarela@gmail.com",
+  "to": "adrianpazosvarela11@gmail.com",
   "from": "pazosvarelaa@gmail.com"
 }

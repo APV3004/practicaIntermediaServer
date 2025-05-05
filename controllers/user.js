@@ -198,7 +198,11 @@ exports.recoverPasswordInit = async (req, res) => {
 
   console.log(`Código de recuperación para ${email}: ${recoveryCode}`);
 
-  res.json({ message: 'Código de recuperación enviado' });
+  const response = { message: 'Código de recuperación enviado' };
+if (process.env.NODE_ENV === 'test') {
+  response.code = recoveryCode;
+}
+res.status(200).json(response);
 };
 
 // ✅ POST /reset-password

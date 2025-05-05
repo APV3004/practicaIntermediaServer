@@ -37,17 +37,9 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 // Rutas
 app.use('/api/user', userRoutes);
 app.use('/api/project', projectRoutes);
-app.use('/api/client', clientRoutes);
-app.use('/api', mailRoutes);
+app.use('/api/mail', mailRoutes);
 app.use('/api/deliverynote', deliveryNoteRoutes);
+app.use('/api/client', clientRoutes);
 
-// Conexión a la base de datos
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Conectado a MongoDB'))
-  .catch(err => console.error('Error conectando a MongoDB:', err));
-
-// Arrancar el servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+// Exportar app para testing
+module.exports = app;
